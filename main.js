@@ -1,3 +1,31 @@
+// Dados de exemplo para preencher a tabela de horários
+const horariosDisponiveis = [
+  { dia: 'Segunda-feira', inicio: '08:00', fim: '10:00', reserva: '', id: 1 },
+  { dia: 'Segunda-feira', inicio: '10:00', fim: '12:00', reserva: '', id: 2 },
+  { dia: 'Terça-feira', inicio: '14:00', fim: '16:00', reserva: '', id: 3 },
+  { dia: 'Quarta-feira', inicio: '16:00', fim: '18:00', reserva: '', id: 4 }
+];
+
+function carregarHorariosNaTabela() {
+  const tbody = document.getElementById('horariosTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  horariosDisponiveis.forEach(h => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${h.dia}</td>
+      <td>${h.inicio}</td>
+      <td>${h.fim}</td>
+      <td>${h.reserva}</td>
+      <td><input type="checkbox" name="horarioSelecionado" value="${h.id}"></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Carregar horários ao abrir o modal Bootstrap
+document.addEventListener('DOMContentLoaded', carregarHorariosNaTabela);
+document.getElementById('largageModalBootstrap').addEventListener('show.bs.modal', carregarHorariosNaTabela);
  
     // Dados de exemplo de salas disponíveis por horário
     const salasPorHorario = {
@@ -22,7 +50,7 @@
   const reservaMsg = document.getElementById('reservaMsg');
   const cardsContainer = document.getElementById('cardsContainer');
   const turmaInput = document.getElementById('tituloTurma').value;
-  const diaSemanaInput = document.getElementById('diaSemanaSelect').value;
+  // Removido campo dia da semana
       horariosBtnsContainer.innerHTML = '';
       reservaMsg.style.display = 'none';
       cardsContainer.innerHTML = '';
@@ -34,51 +62,36 @@
       }
 
       // Armazena horários selecionados por sala
-      let horariosSelecionados = {};
-      horarios.forEach(horario => {
         const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'btn btn-outline-primary';
-        btn.textContent = horario;
-        btn.onclick = function () {
-          if (btn.classList.contains('btn-success')) {
-            btn.classList.remove('btn-success');
-            btn.classList.add('btn-outline-primary');
-            reservaMsg.style.display = 'none';
-            // Remove horário do array de selecionados
-            Object.keys(horariosSelecionados).forEach(salaNum => {
-              horariosSelecionados[salaNum] = horariosSelecionados[salaNum].filter(h => h !== horario);
-              if (horariosSelecionados[salaNum].length === 0) delete horariosSelecionados[salaNum];
-            });
-            renderCards();
-          } else {
-            btn.classList.remove('btn-outline-primary');
-            btn.classList.add('btn-success');
-            reservaMsg.style.display = 'none';
-            // Adiciona horário ao array de selecionados por sala
-            const salas = salasPorHorario[horario] || [ { numero: 'M-999', turma: 'Turma X' } ];
-            salas.forEach(sala => {
-              if (!horariosSelecionados[sala.numero]) horariosSelecionados[sala.numero] = [];
-              if (!horariosSelecionados[sala.numero].includes(horario)) horariosSelecionados[sala.numero].push(horario);
-            });
-            renderCards();
-          }
-        };
-        horariosBtnsContainer.appendChild(btn);
+      // Pega os horários selecionados na tabela
+      const horariosSelecionadosTable = Array.from(document.querySelectorAll('input[name="horarioSelecionado"]:checked'));
+      if (horariosSelecionadosTable.length === 0) {
+        alert('Selecione pelo menos um horário na tabela!');
+        return;
+      }
+
+      // Monta array de horários selecionados
+      let horariosSelecionados = [];
+      horariosSelecionadosTable.forEach(checkbox => {
+        const id = parseInt(checkbox.value, 10);
+        const horarioObj = horariosDisponiveis.find(h => h.id === id);
+        if (!horarioObj) return;
+        horariosSelecionados.push(horarioObj);
       });
 
-      function renderCards() {
-        cardsContainer.innerHTML = '';
-        Object.keys(horariosSelecionados).forEach(salaNum => {
-          const sala = Object.values(salasPorHorario).flat().find(s => s.numero === salaNum) || { numero: salaNum };
+      // Renderiza cards para cada horário selecionado
+      cardsContainer.innerHTML = '';
+      horariosSelecionados.forEach(horarioObj => {
+        // Associa sala (mock)
+        const salas = salasPorHorario[horarioObj.inicio] || [ { numero: 'M-999', turma: turmaInput } ];
+        salas.forEach(sala => {
           const card = document.createElement('div');
           card.className = 'card mb-2';
           card.innerHTML = `
             <div class="card-body">
-              <h5 class="card-title">Sala: ${salaNum}</h5>
+              <h5 class="card-title">Sala: ${sala.numero}</h5>
               <p class="card-text">Turma: ${turmaInput}</p>
-              <p class="card-text">Dia da Semana: ${diaSemanaInput}</p>
-              <p class="card-text">Horários Reservados: ${horariosSelecionados[salaNum].join(', ')}</p>
+              <p class="card-text">Horário Reservado: ${horarioObj.dia} (${horarioObj.inicio} - ${horarioObj.fim})</p>
               <button type="button" class="btn btn-success reservar-btn">Reservar</button>
               <div class="confirmacao-reserva mt-2" style="display:none;"></div>
             </div>
@@ -92,7 +105,7 @@
             confirmacaoDiv.style.display = 'block';
             const confirmarBtn = confirmacaoDiv.querySelector('.confirmar-btn');
             confirmarBtn.onclick = function() {
-              reservaMsg.textContent = `Reserva da sala ${salaNum} feita com sucesso!`;
+              reservaMsg.textContent = `Reserva da sala ${sala.numero} feita com sucesso!`;
               reservaMsg.style.display = 'block';
               confirmacaoDiv.style.display = 'none';
               setTimeout(() => {
@@ -102,13 +115,5 @@
           };
           cardsContainer.appendChild(card);
         });
-      }
+      });
     });
-  document.getElementById('limparCamposBtn').onclick = function() {
-    document.getElementById('formularioModal').reset();
-    document.getElementById('HorariosCard').value = '';
-    document.getElementById('horariosBtnsContainer').innerHTML = '';
-    document.getElementById('cardsContainer').innerHTML = '';
-    document.getElementById('reservaMsg').style.display = 'none';
-  };
-  

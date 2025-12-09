@@ -49,18 +49,6 @@
                   <input type="number" class="form-control" id="tituloCapacidade" name="tituloCapacidade" required min="0">
                 </div>
 
-                 <div class="mb-3">
-                  <label for="diaSemanaSelect" class="form-label">Dia da Semana</label>
-                  <select class="form-select" id="diaSemanaSelect" name="diaSemanaSelect" required>
-                    <option value="">Selecione o dia</option>
-                    <option value="Segunda">Segunda-feira</option>
-                    <option value="Terça">Terça-feira</option>
-                    <option value="Quarta">Quarta-feira</option>
-                    <option value="Quinta">Quinta-feira</option>
-                    <option value="Sexta">Sexta-feira</option>
-                    <option value="Sábado">Sábado</option>
-                  </select>
-                </div>
 
                 <div class="mb-3">
                   <label for="blocoSelect" class="form-label">Bloco</label>
@@ -96,9 +84,23 @@
                 </div>
 
                 <div class="mb-3">
-                  <label for="Horarios" class="form-label">Selecione um ou mais Horarios: </label>
-                  <textarea class="form-control d-none" id="HorariosCard" name="HorariosCard" rows="3"></textarea>
-                  <div id="horariosBtnsContainer" class="d-flex flex-wrap gap-2"></div>
+                  <label class="form-label">Reserva Atual:</label>
+                  <div class="table-responsive">
+                    <table class="table table-bordered align-middle text-center">
+                      <thead style="background:yellow;">
+                        <tr>
+                          <th>dia da semana</th>
+                          <th>horario inicial</th>
+                          <th>horario final</th>
+                          <th>reserva atual</th>
+                          <th>checkbox(selecione)</th>
+                        </tr>
+                      </thead>
+                      <tbody id="horariosTableBody">
+                        <!-- Linhas dinâmicas via JS -->
+                      </tbody>
+                    </table>
+                  </div>
                   <div id="reservaMsg" class="mt-2 text-success fw-bold" style="display:none;"></div>
                 </div>
                 <button type="submit" class="btn btn-success">Filtrar</button>
