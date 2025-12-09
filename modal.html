@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modal</title>
-  <!-- Bootstrap CSS -->
+  
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
@@ -28,7 +28,7 @@
         </div>
         <div class="modal-body">
           <div class="row">
-            <!-- Coluna do formulário -->
+            <!-- cln formulário -->
             <div class="col-md-6 border-end">
               <h6>Encontre o melhor horario: </h6>
               <form id="formularioModal">
@@ -37,14 +37,29 @@
                   <input type="text" class="form-control" id="tituloTurma" name="tituloTurma" required>
                 </div>
 
+               
+
                 <div class="mb-3">
                   <label for="tituloDisciplina" class="form-label">Disciplina</label>
                   <input type="text" class="form-control" id="tituloDisciplina" name="tituloDisciplina" required>
                 </div>
 
-                 <div class="mb-3">
+                <div class="mb-3">
                   <label for="tituloCapacidade" class="form-label">Capacidade</label>
-                  <input type="number" class="form-control" id="tituloCapacidade" name="tituloCapacidade" required>
+                  <input type="number" class="form-control" id="tituloCapacidade" name="tituloCapacidade" required min="0">
+                </div>
+
+                 <div class="mb-3">
+                  <label for="diaSemanaSelect" class="form-label">Dia da Semana</label>
+                  <select class="form-select" id="diaSemanaSelect" name="diaSemanaSelect" required>
+                    <option value="">Selecione o dia</option>
+                    <option value="Segunda">Segunda-feira</option>
+                    <option value="Terça">Terça-feira</option>
+                    <option value="Quarta">Quarta-feira</option>
+                    <option value="Quinta">Quinta-feira</option>
+                    <option value="Sexta">Sexta-feira</option>
+                    <option value="Sábado">Sábado</option>
+                  </select>
                 </div>
 
                 <div class="mb-3">
@@ -54,6 +69,9 @@
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
                   </select>
                 </div>
 
@@ -84,12 +102,13 @@
                   <div id="reservaMsg" class="mt-2 text-success fw-bold" style="display:none;"></div>
                 </div>
                 <button type="submit" class="btn btn-success">Filtrar</button>
+                <button type="button" class="btn btn-secondary ms-2" id="limparCamposBtn">Limpar Campos</button>
               </form>
             </div>
-            <!-- Coluna de renderização dos cards -->
+            <!-- Cln dos cards -->
             <div class="col-md-6">
               <h6>Cards</h6>
-              <div id="cardsContainer"></div>
+              <div id="cardsContainer" style="max-height: 650px; overflow-y: auto;"></div>
             </div>
           </div>
         </div>
@@ -109,88 +128,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-  <script>
-    // Dados de exemplo de salas disponíveis por horário
-    const salasPorHorario = {
-      '08:00': [ { numero: 'M-220', turma: 'Turma A' }, { numero: 'M-221', turma: 'Turma B' } ],
-      '10:00': [ { numero: 'M-222', turma: 'Turma C' } ],
-      '14:00': [ { numero: 'M-223', turma: 'Turma D' }, { numero: 'M-224', turma: 'Turma E' } ],
-      '16:00': [ { numero: 'M-225', turma: 'Turma F' } ]
-    };
-
-    document.getElementById('formularioModal').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const horariosInput = document.getElementById('HorariosCard').value.trim();
-      const horariosBtnsContainer = document.getElementById('horariosBtnsContainer');
-      const reservaMsg = document.getElementById('reservaMsg');
-      const cardsContainer = document.getElementById('cardsContainer');
-      horariosBtnsContainer.innerHTML = '';
-      reservaMsg.style.display = 'none';
-      cardsContainer.innerHTML = '';
-
-      // Pega os horários do textarea (separados por vírgula ou nova linha)
-      let horarios = horariosInput.split(/[,\n]+/).map(h => h.trim()).filter(h => h);
-      if (horarios.length === 0) {
-        horarios = ['08:00', '10:00', '14:00', '16:00'];
-      }
-
-      horarios.forEach(horario => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'btn btn-outline-primary';
-        btn.textContent = horario;
-        btn.onclick = function () {
-          // Toggle seleção
-          if (btn.classList.contains('btn-success')) {
-            btn.classList.remove('btn-success');
-            btn.classList.add('btn-outline-primary');
-            reservaMsg.style.display = 'none';
-            cardsContainer.innerHTML = '';
-          } else {
-            // Seleciona
-            btn.classList.remove('btn-outline-primary');
-            btn.classList.add('btn-success');
-            reservaMsg.style.display = 'none';
-            // Renderiza cards das salas disponíveis para o horário selecionado
-            cardsContainer.innerHTML = '';
-            const salas = salasPorHorario[horario] || [ { numero: 'M-999', turma: 'Turma X' } ];
-            salas.forEach(sala => {
-              const card = document.createElement('div');
-              card.className = 'card mb-2';
-              card.innerHTML = `
-                <div class="card-body">
-                  <h5 class="card-title">Sala: ${sala.numero}</h5>
-                  <p class="card-text">Turma: ${sala.turma}</p>
-                  <button type="button" class="btn btn-success reservar-btn">Reservar</button>
-                  <div class="confirmacao-reserva mt-2" style="display:none;"></div>
-                </div>
-              `;
-              // Adiciona evento ao botão reservar
-              card.querySelector('.reservar-btn').onclick = function() {
-                const confirmacaoDiv = card.querySelector('.confirmacao-reserva');
-                confirmacaoDiv.innerHTML = `
-                  <span>Tem certeza que deseja reservar essa sala?</span>
-                  <button type="button" class="btn btn-warning btn-sm ms-2 confirmar-btn">Confirmar</button>
-                `;
-                confirmacaoDiv.style.display = 'block';
-                const confirmarBtn = confirmacaoDiv.querySelector('.confirmar-btn');
-                confirmarBtn.onclick = function() {
-                  reservaMsg.textContent = `Reserva da sala ${sala.numero} feita com sucesso!`;
-                  reservaMsg.style.display = 'block';
-                  setTimeout(() => {
-                    reservaMsg.style.display = 'none';
-                  }, 2500);
-                  confirmacaoDiv.style.display = 'none';
-                };
-              };
-              cardsContainer.appendChild(card);
-            });
-          }
-        };
-        horariosBtnsContainer.appendChild(btn);
-      });
-    });
-  </script>
+ 
 </body>
 
+<script src="main.js"></script>
 </html>
