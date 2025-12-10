@@ -1,0 +1,9 @@
+/* Custom styles to make inputs look like virtual-select */
+.form-control {
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    background-color: #fff;
+    height: 38px;
+}
