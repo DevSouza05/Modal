@@ -5,5 +5,9 @@
     font-size: 14px;
     border-radius: 4px;
     background-color: #fff;
-    height: 38px;
+    height: 40px;
+}
+
+.highlight-row {
+    background-color: yellow;
 }
