@@ -1,3 +1,45 @@
+// Mock de "API" com turmas, disciplinas e horários
+const apiHorarios = {
+  turmas: [
+    {
+      nome: "Turma A",
+      disciplinas: [
+        {
+          nome: "Matemática",
+          horarios: [
+            { dia: "Segunda-feira", inicio: "08:00", fim: "10:00", reserva: "" },
+            { dia: "Quarta-feira", inicio: "10:00", fim: "12:00", reserva: "" }
+          ]
+        },
+        {
+          nome: "Português",
+          horarios: [
+            { dia: "Terça-feira", inicio: "14:00", fim: "16:00", reserva: "" }
+          ]
+        }
+      ]
+    },
+    {
+      nome: "Turma B",
+      disciplinas: [
+        {
+          nome: "História",
+          horarios: [
+            { dia: "Quinta-feira", inicio: "08:00", fim: "10:00", reserva: "" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+function buscarHorariosPorTurmaDisciplina(turma, disciplina) {
+  const turmaObj = apiHorarios.turmas.find(t => t.nome.toLowerCase() === turma.toLowerCase());
+  if (!turmaObj) return [];
+  const discObj = turmaObj.disciplinas.find(d => d.nome.toLowerCase() === disciplina.toLowerCase());
+  if (!discObj) return [];
+  return discObj.horarios.map((h, idx) => ({ ...h, id: idx + 1 }));
+}
 // Dados de exemplo para preencher a tabela de horários
 const horariosDisponiveis = [
   { dia: 'Segunda-feira', inicio: '08:00', fim: '10:00', reserva: '', id: 1 },
@@ -6,28 +48,41 @@ const horariosDisponiveis = [
   { dia: 'Quarta-feira', inicio: '16:00', fim: '18:00', reserva: '', id: 4 }
 ];
 
-function carregarHorariosNaTabela() {
+function carregarHorariosNaTabela(horarios) {
   const tbody = document.getElementById('horariosTableBody');
   if (!tbody) return;
   tbody.innerHTML = '';
-  horariosDisponiveis.forEach(h => {
+  horarios.forEach((h, idx) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${h.dia}</td>
       <td>${h.inicio}</td>
       <td>${h.fim}</td>
-      <td>${h.reserva}</td>
+      <td>${h.reserva || ''}</td>
       <td><input type="checkbox" name="horarioSelecionado" value="${h.id}"></td>
     `;
     tbody.appendChild(tr);
   });
 }
 
-// Carregar horários ao abrir o modal Bootstrap
-document.addEventListener('DOMContentLoaded', carregarHorariosNaTabela);
-document.getElementById('largageModalBootstrap').addEventListener('show.bs.modal', carregarHorariosNaTabela);
+
+
+
+document.getElementById('tituloTurma').addEventListener('blur', atualizarTabelaHorarios);
+document.getElementById('tituloDisciplina').addEventListener('blur', atualizarTabelaHorarios);
+
+function atualizarTabelaHorarios() {
+  const turma = document.getElementById('tituloTurma').value;
+  const disciplina = document.getElementById('tituloDisciplina').value;
+  if (turma && disciplina) {
+    const horarios = buscarHorariosPorTurmaDisciplina(turma, disciplina);
+    carregarHorariosNaTabela(horarios);
+  } else {
+    carregarHorariosNaTabela([]);
+  }
+}
  
-    // Dados de exemplo de salas disponíveis por horário
+    
     const salasPorHorario = {
       '08:00': [ { numero: 'M-220', turma: 'Turma A' }, { numero: 'M-221', turma: 'Turma B' } ],
       '10:00': [ { numero: 'M-222', turma: 'Turma C' } ],
@@ -55,22 +110,22 @@ document.getElementById('largageModalBootstrap').addEventListener('show.bs.modal
       reservaMsg.style.display = 'none';
       cardsContainer.innerHTML = '';
 
-      // Pega os horários do textarea 
+      
       let horarios = horariosInput.split(/[,\n]+/).map(h => h.trim()).filter(h => h);
       if (horarios.length === 0) {
         horarios = ['08:00', '10:00', '14:00', '16:00'];
       }
 
-      // Armazena horários selecionados por sala
+      
         const btn = document.createElement('button');
-      // Pega os horários selecionados na tabela
+      // horários selecionados na tabela
       const horariosSelecionadosTable = Array.from(document.querySelectorAll('input[name="horarioSelecionado"]:checked'));
       if (horariosSelecionadosTable.length === 0) {
         alert('Selecione pelo menos um horário na tabela!');
         return;
       }
 
-      // Monta array de horários selecionados
+      // array de horários selecionados
       let horariosSelecionados = [];
       horariosSelecionadosTable.forEach(checkbox => {
         const id = parseInt(checkbox.value, 10);
@@ -116,4 +171,41 @@ document.getElementById('largageModalBootstrap').addEventListener('show.bs.modal
           cardsContainer.appendChild(card);
         });
       });
+    });
+
+    VirtualSelect.init({
+      ele: '#bloco-select',
+      options: [
+        { label: 'A', value: 'A' },
+        { label: 'B', value: 'B' },
+        { label: 'C', value: 'C' },
+        { label: 'D', value: 'D' },
+        { label: 'E', value: 'E' },
+        { label: 'F', value: 'F' },
+      ],
+      search: true,
+      placeholder: 'Selecione o bloco',
+    });
+
+    VirtualSelect.init({
+      ele: '#conjunto-select',
+      options: [
+        { label: '1', value: '1' },
+        { label: '2', value: '2' },
+        { label: '3', value: '3' },
+      ],
+      search: true,
+      placeholder: 'Selecione o conjunto',
+    });
+
+    VirtualSelect.init({
+      ele: '#recurso-select',
+      options: [
+        { label: 'Projetor', value: 'Projetor' },
+        { label: 'Computador', value: 'Computador' },
+        { label: 'Quadro Branco', value: 'Quadro Branco' },
+      ],
+      multiple: true,
+      search: true,
+      placeholder: 'Selecione os recursos',
     });
