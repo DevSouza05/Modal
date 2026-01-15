@@ -54,7 +54,10 @@ function buscarHorariosPorTurmaDisciplina(turma, disciplina) {
   const discObj = turmaObj.disciplinas.find(d => d.nome.toLowerCase() === disciplina.toLowerCase());
   if (!discObj) return [];
   return discObj.horarios.map((h, idx) => ({ ...h, id: idx + 1 }));
+
+
 }
+
 // Dados - para preencher a tabela de horários
 const horariosDisponiveis = [
   { dia: 'Segunda-feira', inicio: '08:00', fim: '10:00', reserva: '', id: 1 },
@@ -101,7 +104,7 @@ function carregarHorariosNaTabela(horarios) {
   // Adiciona evento para mostrar cards após seleção de horário
   const checkboxes = tbody.querySelectorAll('input[type="checkbox"]');
   checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
+    checkbox.addEventListener('change', function () {
       cardsDiv.innerHTML = '';
       const selecionados = Array.from(checkboxes).filter(cb => cb.checked);
       if (selecionados.length > 0) {
@@ -128,13 +131,12 @@ function carregarHorariosNaTabela(horarios) {
   });
 }
 
-
-
 document.getElementById('tituloTurma').addEventListener('blur', atualizarTabelaHorarios);
 document.getElementById('tituloDisciplina').addEventListener('blur', atualizarTabelaHorarios);
 
 function atualizarTabelaHorarios() {
   const turma = document.getElementById('tituloTurma').value;
+  // console.log(turma);
   const disciplina = document.getElementById('tituloDisciplina').value;
   if (turma && disciplina) {
     const horarios = buscarHorariosPorTurmaDisciplina(turma, disciplina);
@@ -233,6 +235,26 @@ document.getElementById('formularioModal').addEventListener('submit', function (
     });
   });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+  VirtualSelect.init({
+    ele: '#turno-select',
+    options: [
+      { label: 'A', value: 'A' },
+      { label: 'B', value: 'B' },
+      { label: 'C', value: 'C' },
+      { label: 'D', value: 'D' },
+      { label: 'E', value: 'E' },
+      { label: 'F', value: 'F' },
+    ],
+    multiple: true,
+    search: true,
+    placeholder: 'Selecione os turnos',
+  });
+});
+
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
   VirtualSelect.init({

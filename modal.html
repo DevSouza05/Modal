@@ -14,7 +14,6 @@
 </head>
 
 <body>
-  </div>
 
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#largageModalBootstrap">
     Modal
@@ -40,8 +39,6 @@
                   <input type="text" class="form-control" id="tituloTurma" name="tituloTurma" required>
                 </div>
 
-               
-
                 <div class="mb-3">
                   <label for="tituloDisciplina" class="form-label">Disciplina</label>
                   <input type="text" class="form-control" id="tituloDisciplina" name="tituloDisciplina" required>
@@ -50,6 +47,21 @@
                 <div class="mb-3">
                   <label for="tituloCapacidade" class="form-label">Capacidade</label>
                   <input type="number" class="form-control" id="tituloCapacidade" name="tituloCapacidade" required min="0">
+                </div>
+
+
+                <div class="mb-3">
+                  <label for="blocoSelect" class="form-label">Turno</label>
+                  <div id="turno-select"></div>
+                  <!-- <select class="form-select" id="blocoSelect" name="blocoSelect" required>
+                    <option value="">Selecione o bloco</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                  </select> -->
                 </div>
 
 
@@ -72,7 +84,7 @@
                   <div id="conjunto-select"></div>
                   <!-- <select class="form-select" id="conjuntoSelect" name="conjuntoSelect" required>
                     <option value="">Selecione o conjunto</option>
-                    <option value="1">1</option>
+                    <option value="1">1</option>  
                     <option value="2">2</option>
                     <option value="3">3</option>
                   </select> -->
@@ -97,22 +109,22 @@
             </div>
             <!-- Cln dos cards -->
             <div class="col-md-6">
-              <!-- <h6>Cards</h6> -->
+             
               <div id="cardsContainer" style="max-height: 650px; overflow-y: auto;"></div>
               <label class="form-label mt-3">Reserva Atual:</label>
               <div class="table-responsive">
                 <table class="table table-bordered align-middle text-center">
                   <thead style="background:yellow;">
                     <tr>
-                      <th>dia da semana</th>
-                      <th>horario inicial</th>
-                      <th>horario final</th>
-                      <th>reserva atual</th>
-                      <th>Reserve o horario</th>
+                      <th>Dia da semana</th>
+                      <th>Horário inicial</th>
+                      <th>Horário final</th>
+                      <th>Reserva atual</th>
+                      <th>Reserve o horário</th>
                     </tr>
                   </thead>
                   <tbody id="horariosTableBody">
-                    <!-- Linhas dinâmicas via JS -->
+                   
                   </tbody>
                 </table>
               </div>
