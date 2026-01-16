@@ -147,15 +147,26 @@ function atualizarTabelaHorarios() {
 }
 
 const salasPorHorario = {
-  '08:00': [{ numero: 'M-220', turma: 'Turma A' }, { numero: 'M-221', turma: 'Turma B' }],
-  '10:00': [{ numero: 'M-222', turma: 'Turma C' }],
-  '14:00': [{ numero: 'M-223', turma: 'Turma D' }, { numero: 'M-224', turma: 'Turma E' }],
-  '16:00': [{ numero: 'M-225', turma: 'Turma F' }]
+  '08:00': [
+    { numero: 'M-220', turma: 'Turma A', capacidade: 30}],
+  '10:00': [
+    { numero: 'M-222', turma: 'Turma C', capacidade: 20 }],
+  '14:00': [
+    { numero: 'M-223', turma: 'Turma D', capacidade: 15 }],
+  '16:00':[
+    { numero: 'M-225', turma: 'Turma F', capacidade: 20 }
+   ]
 };
 
 document.getElementById('formularioModal').addEventListener('submit', function (e) {
 
   const capacidadeInput = document.getElementById('tituloCapacidade');
+  const capacidadeNecessaria = parseInt(capacidadeInput.value, 10);
+
+
+
+
+
   if (parseInt(capacidadeInput.value, 10) < 0) {
     capacidadeInput.value = '';
     capacidadeInput.focus();
@@ -200,52 +211,75 @@ document.getElementById('formularioModal').addEventListener('submit', function (
   // Renderiza cards para cada horário selecionado
   cardsContainer.innerHTML = '';
   horariosSelecionados.forEach(horarioObj => {
-    // Associa sala (mock)
-    const salas = salasPorHorario[horarioObj.inicio] || [{ numero: 'M-999', turma: turmaInput }];
-    salas.forEach(sala => {
-      const card = document.createElement('div');
-      card.className = 'card mb-2';
-      card.innerHTML = `
-            <div class="card-body">
-              <h5 class="card-title">Sala: ${sala.numero}</h5>
-              <p class="card-text">Turma: ${turmaInput}</p>
-              <p class="card-text">Horário Reservado: ${horarioObj.dia} (${horarioObj.inicio} - ${horarioObj.fim})</p>
-              <button type="button" class="btn btn-success reservar-btn">Reservar</button>
-              <div class="confirmacao-reserva mt-2" style="display:none;"></div>
-            </div>
-          `;
-      card.querySelector('.reservar-btn').onclick = function () {
-        const confirmacaoDiv = card.querySelector('.confirmacao-reserva');
-        confirmacaoDiv.innerHTML = `
-              <span>Tem certeza que deseja reservar essa sala?</span>
-              <button type="button" class="btn btn-warning btn-sm ms-2 confirmar-btn">Confirmar</button>
-            `;
-        confirmacaoDiv.style.display = 'block';
-        const confirmarBtn = confirmacaoDiv.querySelector('.confirmar-btn');
-        confirmarBtn.onclick = function () {
-          reservaMsg.textContent = `Reserva da sala ${sala.numero} feita com sucesso!`;
-          reservaMsg.style.display = 'block';
-          confirmacaoDiv.style.display = 'none';
-          setTimeout(() => {
-            reservaMsg.style.display = 'none';
-          }, 2500);
-        };
+
+  // capacidade informada no formulário
+  const capacidadeNecessaria = parseInt(
+    document.getElementById('tituloCapacidade').value,
+    10
+  );
+
+  // Associa sala (mock)
+  let salas = salasPorHorario[horarioObj.inicio] || [];
+
+  // 🔥 FILTRO POR CAPACIDADE
+  salas = salas.filter(sala => sala.capacidade >= capacidadeNecessaria);
+
+  // Se nenhuma sala atender à capacidade, não renderiza cards
+  if (salas.length === 0) {
+    return;
+  }
+
+  salas.forEach(sala => {
+    const card = document.createElement('div');
+    card.className = 'card mb-2';
+    card.innerHTML = `
+      <div class="card-body">
+        <h5 class="card-title">Sala: ${sala.numero}</h5>
+        <p class="card-text">Turma: ${turmaInput}</p>
+        <p class="card-text">Capacidade da sala: ${sala.capacidade}</p>
+        <p class="card-text">
+          Horário Reservado: ${horarioObj.dia} (${horarioObj.inicio} - ${horarioObj.fim})
+        </p>
+        <button type="button" class="btn btn-success reservar-btn">Reservar</button>
+        <div class="confirmacao-reserva mt-2" style="display:none;"></div>
+      </div>
+    `;
+
+    card.querySelector('.reservar-btn').onclick = function () {
+      const confirmacaoDiv = card.querySelector('.confirmacao-reserva');
+      confirmacaoDiv.innerHTML = `
+        <span>Tem certeza que deseja reservar essa sala?</span>
+        <button type="button" class="btn btn-warning btn-sm ms-2 confirmar-btn">Confirmar</button>
+      `;
+      confirmacaoDiv.style.display = 'block';
+
+      const confirmarBtn = confirmacaoDiv.querySelector('.confirmar-btn');
+      confirmarBtn.onclick = function () {
+        reservaMsg.textContent = `Reserva da sala ${sala.numero} feita com sucesso!`;
+        reservaMsg.style.display = 'block';
+        confirmacaoDiv.style.display = 'none';
+
+        setTimeout(() => {
+          reservaMsg.style.display = 'none';
+        }, 2500);
       };
-      cardsContainer.appendChild(card);
-    });
+    };
+
+    cardsContainer.appendChild(card);
   });
+
+});
+
 });
 
 document.addEventListener('DOMContentLoaded', function () {
   VirtualSelect.init({
     ele: '#turno-select',
     options: [
-      { label: 'A', value: 'A' },
-      { label: 'B', value: 'B' },
-      { label: 'C', value: 'C' },
-      { label: 'D', value: 'D' },
-      { label: 'E', value: 'E' },
-      { label: 'F', value: 'F' },
+      { label: 'Manhã', value: 'Manhã' },
+      { label: 'Tarde', value: 'Tarde' },
+      { label: 'Noite', value: 'Noite' },
+   
     ],
     multiple: true,
     search: true,
