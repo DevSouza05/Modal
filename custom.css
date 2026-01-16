@@ -11,3 +11,43 @@
 .highlight-row {
     background-color: yellow;
 }
+
+
+/* ===== ANIMAÇÃO DOS CARDS ABAIXO DA TABELA ===== */
+#cardsAbaixoTabela .card {
+  border-radius: 12px;
+  transition: 
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+/* Hover */
+#cardsAbaixoTabela .card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+}
+
+#cardsAbaixoTabela .card:hover .card-title {
+  color: #198754; /* verde bootstrap */
+}
+#cardsAbaixoTabela .card:active {
+  transform: scale(0.98);
+}
+
+/* Animação ao aparecer */
+#cardsAbaixoTabela .card {
+  animation: fadeUp 0.35s ease forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

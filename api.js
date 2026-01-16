@@ -1,6 +1,7 @@
-// Funções para manipular o DOM e interagir com a API
+// manipular o DOM e interagir com a API
 
-// Função para buscar dados da API
+"script strict";
+
 async function fetchDaAPI(endpoint) {
   try {
     const response = await fetch(endpoint);
@@ -14,7 +15,7 @@ async function fetchDaAPI(endpoint) {
   }
 }
 
-// Função para renderizar os cards de horários
+
 function renderizarHorarios(horarios) {
   const horariosContainer = document.getElementById('horariosBtnsContainer');
   horariosContainer.innerHTML = '';
@@ -28,12 +29,12 @@ function renderizarHorarios(horarios) {
   });
 }
 
-// Função para selecionar um horário
+
 function selecionarHorario(horario) {
-  // Lógica para selecionar um horário
+  //  selecionar um horário
 }
 
-// Função para renderizar os cards de salas
+
 function renderizarSalas(salas) {
   const salasContainer = document.getElementById('cardsContainer');
   salasContainer.innerHTML = '';
@@ -53,7 +54,7 @@ function renderizarSalas(salas) {
   });
 }
 
-// Função para reservar uma sala
+
 function reservarSala(numeroSala) {
   const reservaMsg = document.getElementById('reservaMsg');
   reservaMsg.textContent = `Reserva da sala ${numeroSala} feita com sucesso!`;

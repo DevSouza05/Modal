@@ -14,130 +14,91 @@
 </head>
 
 <body>
-  </div>
 
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#largageModalBootstrap">
-    Modal
-  </button>
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <!-- cln formulário -->
+      <div class="col-md-6 border-end">
+        <h5 id="largageModalBootstrapLabel">Horarios disponíveis</h5>
+        <h6>Encontre o melhor horario: </h6>
 
-  <!-- Modal -->
-  <div class="modal fade" id="largageModalBootstrap" tabindex="-1" aria-labelledby="largageModalBootstrapLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="largageModalBootstrapLabel">Horarios disponíveis</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <!-- cln formulário -->
-            <div class="col-md-6 border-end">
-              <h6>Encontre o melhor horario: </h6>
-              <form id="formularioModal">
-                <div class="mb-3">
-                  <label for="tituloTurma" class="form-label">Turma</label>
-                  <input type="text" class="form-control" id="tituloTurma" name="tituloTurma" required>
-                </div>
-
-               
-
-                <div class="mb-3">
-                  <label for="tituloDisciplina" class="form-label">Disciplina</label>
-                  <input type="text" class="form-control" id="tituloDisciplina" name="tituloDisciplina" required>
-                </div>
-
-                <div class="mb-3">
-                  <label for="tituloCapacidade" class="form-label">Capacidade</label>
-                  <input type="number" class="form-control" id="tituloCapacidade" name="tituloCapacidade" required min="0">
-                </div>
-
-
-                <div class="mb-3">
-                  <label for="blocoSelect" class="form-label">Bloco</label>
-                  <div id="bloco-select"></div>
-                  <!-- <select class="form-select" id="blocoSelect" name="blocoSelect" required>
-                    <option value="">Selecione o bloco</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="F">F</option>
-                  </select> -->
-                </div>
-
-                <div class="mb-3">
-                  <label for="conjuntoSelect" class="form-label">Conjunto</label>
-                  <div id="conjunto-select"></div>
-                  <!-- <select class="form-select" id="conjuntoSelect" name="conjuntoSelect" required>
-                    <option value="">Selecione o conjunto</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select> -->
-                </div>
-
-                <div class="mb-3">
-                  <label for="recursoSelect" class="form-label">Recurso</label>
-                  <div id="recurso-select"></div>
-                  <!-- <select class="form-select" id="recursoSelect" name="recursoSelect" required>
-                    <option value="">Selecione o recurso</option>
-                    <option value="Projetor">Projetor</option>
-                    <option value="Computador">Computador</option>
-                    <option value="Quadro Branco">Quadro Branco</option>
-                  </select> -->
-                </div>
-
-             
-             
-                <button type="submit" class="btn btn-success">Filtrar</button>
-                <button type="button" class="btn btn-secondary ms-2" id="limparCamposBtn">Limpar Campos</button>
-              </form>
-            </div>
-            <!-- Cln dos cards -->
-            <div class="col-md-6">
-              <!-- <h6>Cards</h6> -->
-              <div id="cardsContainer" style="max-height: 650px; overflow-y: auto;"></div>
-              <label class="form-label mt-3">Reserva Atual:</label>
-              <div class="table-responsive">
-                <table class="table table-bordered align-middle text-center">
-                  <thead style="background:yellow;">
-                    <tr>
-                      <th>dia da semana</th>
-                      <th>horario inicial</th>
-                      <th>horario final</th>
-                      <th>reserva atual</th>
-                      <th>Reserve o horario</th>
-                    </tr>
-                  </thead>
-                  <tbody id="horariosTableBody">
-                    <!-- Linhas dinâmicas via JS -->
-                  </tbody>
-                </table>
-              </div>
-              <div id="reservaMsg" class="mt-2 text-success fw-bold" style="display:none;"></div>
-            </div>
+        <form id="formularioModal">
+          <div class="mb-3">
+            <label for="tituloTurma" class="form-label">Turma</label>
+            <input type="text" class="form-control" id="tituloTurma" name="tituloTurma" required>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
 
+          <div class="mb-3">
+            <label for="tituloDisciplina" class="form-label">Disciplina</label>
+            <input type="text" class="form-control" id="tituloDisciplina" name="tituloDisciplina" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="tituloCapacidade" class="form-label">Capacidade</label>
+            <input type="number" class="form-control" id="tituloCapacidade" name="tituloCapacidade" required min="0">
+          </div>
+
+          <div class="mb-3">
+            <label for="blocoSelect" class="form-label">Turno</label>
+            <div id="turno-select"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="blocoSelect" class="form-label">Bloco</label>
+            <div id="bloco-select"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="conjuntoSelect" class="form-label">Conjunto</label>
+            <div id="conjunto-select"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="recursoSelect" class="form-label">Recurso</label>
+            <div id="recurso-select"></div>
+          </div>
+
+          <button type="submit" class="btn btn-success">Filtrar</button>
+          <button type="button" class="btn btn-secondary ms-2" id="limparCamposBtn">
+            Limpar Campos
+          </button>
+        </form>
+      </div>
+
+      <!-- Cln dos cards -->
+      <div class="col-md-6">
+        <div id="cardsContainer" style="max-height: 650px; overflow-y: auto;"></div>
+
+        <label class="form-label mt-3">Reserva Atual:</label>
+
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle text-center">
+            <thead style="background:yellow;">
+              <tr>
+                <th>Dia da semana</th>
+                <th>Horário inicial</th>
+                <th>Horário final</th>
+                <th>Reserva atual</th>
+                <th>Reserve o horário</th>
+              </tr>
+            </thead>
+            <tbody id="horariosTableBody"></tbody>
+          </table>
         </div>
+
+        <div id="reservaMsg" class="mt-2 text-success fw-bold" style="display:none;"></div>
       </div>
     </div>
   </div>
 
-  <div class="render">
-  </div>
+  <div class="render"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/virtual-select.min.js"></script>
+  <script src="main.js"></script>
 
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
- 
 </body>
+
 
 <script src="/virtual-select.min.js"></script>
 
